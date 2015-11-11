@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<title>jSlider</title>
+	
+	<!-- bin/jquery.slider.min.css -->
+	<link rel="stylesheet" href="css/jslider.css" type="text/css">
+	<link rel="stylesheet" href="css/jslider.blue.css" type="text/css">
+	<link rel="stylesheet" href="css/jslider.plastic.css" type="text/css">
+	<link rel="stylesheet" href="css/jslider.round.css" type="text/css">
+	<link rel="stylesheet" href="css/jslider.round.plastic.css" type="text/css">
+  <!-- end -->
+
+	<script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+	
+	<!-- bin/jquery.slider.min.js -->
+	<script type="text/javascript" src="js/jshashtable-2.1_src.js"></script>
+	<script type="text/javascript" src="js/jquery.numberformatter-1.2.3.js"></script>
+	<script type="text/javascript" src="js/tmpl.js"></script>
+	<script type="text/javascript" src="js/jquery.dependClass-0.1.js"></script>
+	<script type="text/javascript" src="js/draggable-0.1.js"></script>
+	<script type="text/javascript" src="js/jquery.slider.js"></script>
+  <!-- end -->
+	
+	<style type="text/css" media="screen">
+	  body { background: #EEF0F7; }
+	 .layout { padding: 50px; font-family: Georgia, serif; }
+	 .layout-slider { margin-bottom: 60px; width: 50%; }
+	 .layout-slider-settings { font-size: 12px; padding-bottom: 10px; }
+	 .layout-slider-settings pre { font-family: Courier; }
+	</style>
+
+</head>
+<body>
+  
+  <div class="layout">
+
+    
+	
+
+    <div class="layout-slider-settings">
+<pre>{
+  from: 480,
+  to: 1020,
+  step: 15,
+  scale: ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
+  limits: false,
+  calculate: function( value ){
+    var hours = Math.floor( value / 60 );
+    var mins = ( value - hours*60 );
+    return (hours &lt; 10 ? "0"+hours : hours) + ":" + ( mins == 0 ? "00" : mins );
+  },
+  onstatechange: function( value ){
+    console.dir( this );
+  }
+}</pre>
+    </div>
+    <div class="layout-slider">
+      <input id="Slider5" type="slider" name="area" value="600;720" />
+    </div>
+    <script type="text/javascript" charset="utf-8">
+      
+      jQuery("#Slider5").slider({ from: 480, to: 1020, step: 15, dimension: '', scale: ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'], limits: false, 
+	  calculate: function( value ){
+        var hours = Math.floor( value / 60 );
+        var mins = ( value - hours*60 );
+        return (hours < 10 ? "0"+hours : hours) + ":" + ( mins == 0 ? "00" : mins );
+      }})
+
+    </script>
+    
+  </div>
+
+    
+</body>
+</html>

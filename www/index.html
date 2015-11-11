@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <title>Тестовое задание</title>
+        <link href="image/icon.png" rel="icon">
+        <link rel="stylesheet" type="text/css" href="style/style.css">
+        <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+
+        <script type="text/javascript" src="js/jquery-1.9.0.min.js"></script><!--использовал эту версию потому, что ie8 выдает ошибку при использовании версии 2.1.1 -->
+        <script type="text/javascript" src="js/jquery.autofocus-min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/placeholder.js"></script>
+        <script type="text/javascript" src="js/jquery.maskedinput.min.js"></script>
+        <!-- start: Скрипт для создания элементов HTML5 в ie8-->
+        <!--[if lt IE 9]>
+        <script>
+            document.createElement('header');
+            document.createElement('section');
+        </script>
+        <style type ="text/css">
+            .section #wrapper ul {
+                display: table;
+                height: 100%;
+                width: 100%;
+                table-layout: fixed;
+            }
+
+            .section #wrapper ul li{
+                height: 100%;
+                display: table-cell;
+                float: none;
+            }
+        </style>
+        <![endif]-->
+        <!-- end: Скрипт для создания элементов HTML5 в ie8-->
+
+    </head>
+    <body>
+        <header>
+            <span>Позвоните</span>
+            <div class="call">
+                <div class="form-call">
+                    <h4>Пусть Служба Заботы мне перезвонит</h4>
+
+
+
+                    <form action="" method="get">
+                        <p><label>Имя<input name=name type="text" autofocus required placeholder="Ваше имя" pattern="^[a-zA-Zа-яёА-ЯЁ][a-zA-Zа-яёА-ЯЁ0-9-_\.]{2,}$" oninput="validateName(this)"/></label></p>
+                            <script type="text/javascript">
+                                var valueName = $("name");
+                                valueName.first();
+                                function validateName(valueName) {
+                                    if (valueName.value.length < 3) {
+                                        valueName.setCustomValidity("Минимальная длина имени должна быть более трёх символов");
+                                    }
+                                    else {
+                                        // Если длинная соответствуе требованию, то очищаем сообщение об ошибке
+                                        valueName.setCustomValidity("");
+                                    }
+                                }
+                            </script>
+                        <p><label>E-mail<input name=e-mail type="email" required placeholder="Введите вас email" pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" oninput="validateEmail(this)"/></label></p> <!--В интернете много статаей и информации о то, что pattern не стоит применять для валидации, но соврменный страндарт разрешает его использовать http://www.w3.org/TR/html-markup/input.email.html .-->
+                        <script type="text/javascript">
+                            var valueEmail = $("e-mail");
+                            function validateEmail(valueEmail) {
+                                var email = valueEmail.value;
+                                if ( email!='') {
+                                    var t=email.indexOf('@');
+                                    var re = /[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i;
+                                    if (re.test(email) == false) {
+                                        valueEmail.setCustomValidity('Некорректно указан email!');
+                                    } else {
+                                        // Если значение соответствуе требованию, то очищаем сообщение об ошибке
+                                        valueEmail.setCustomValidity("");
+
+                                    }
+                                }
+                            }
+                        </script>
+                        <p><label>Телефон <input name=phone type="tel" id="phone" required placeholder="+7 (___)-___-__-__" oninput="validatePhone(this)"/></label></p>
+                        <script>
+                            //скрипт маски телефона
+                            $(function() {
+                                $.mask.definitions['~'] = "[+-]";
+                                $("#phone").mask("+7 (999)-999-99-99");
+                                $("input").dblclick(function() {
+                                    $(this).unmask();
+                                });
+                            });
+                            var valuePhone = $("phone");
+                            function validatePhone(valuePhone) {
+                                if (valuePhone.value.length < 11) {
+                                    valuePhone.setCustomValidity("Минимальная длина имени должна быть более трёх символов");
+                                }
+                                else {
+                                    // Если длинная соответствуе требованию, то очищаем сообщение об ошибке
+                                    valuePhone.setCustomValidity("");
+
+                                }
+                            }
+                        </script>
+
+                        <div class="time">
+                            <label class="amount">Желаемое время <span>(опционально)</span></label>
+                            <input name=time type="text" id="amountMin" readonly/><div id="slider-range"></div><input name=time type="text" id="amountMax" readonly/>
+                        </div>
+
+                        <p><input type="submit" value="Отправить заявку"/></p>
+
+                        <!-- остальная форма -->
+                    </form>
+
+
+                    <script type="text/javascript">
+                        //Скрипт плейсхолдера для отображения в старых браузерах. В ie8 input[type="tel"] не работает из-за скрипата маски.
+                        $("FORM").placeholderLebnik();
+                    </script>
+
+                    <script type="text/javascript">
+                        //скрипт слайдера времени
+                        $(function() {
+                            $( "#slider-range" ).slider({
+                                range: true,
+                                step: 15,
+                                min: 600,          //т.к.слайдер умеет считать только в десятиричной системы
+                                max: 1140,         // устанавливаем максимально и минимально время в минутах (10:00 будет 600 , 19:00 будет 1140)
+                                values: [ 660, 720 ], //значение по умолчанию
+                                slide: function( event, ui ) {
+                                    var valHourMin = Math.floor( ui.values[ 0 ] / 60 );
+                                    var valHourMax = Math.floor( ui.values[ 1 ] / 60 );
+                                    var valMinuteMin = ( ui.values[ 0 ] - valHourMin*60 );
+                                    var valMinuteMax = ( ui.values[ 1 ] - valHourMax*60 );
+                                    var valMinTime =  (valHourMin < 10 ? "0"+valHourMin : valHourMin) + ":" + ( valMinuteMin == 0 ? "00" : valMinuteMin);
+                                    var valMaxTime = (valHourMax < 10 ? "0"+valHourMax : valHourMax) + ":" + ( valMinuteMax == 0 ? "00" : valMinuteMax);
+                                    $( "#amountMin" ).val( valMinTime);
+                                    $( "#amountMax" ).val( valMaxTime);
+                                }
+                            });
+                            var valuesOne = $( "#slider-range" ).slider( "values", 0 );
+                            var valuesTwo = $( "#slider-range" ).slider( "values", 1 );
+                            var valuesHourMin = Math.floor( valuesOne / 60 );
+                            var valuesHourMax = Math.floor( valuesTwo / 60 );
+                            var valuesMinuteMin = ( valuesOne - valuesHourMin*60 );
+                            var valuesMinuteMax = ( valuesTwo - valuesHourMax*60 );
+                            var valuesMinTime =  (valuesHourMin < 10 ? "0"+valuesHourMin : valuesHourMin) + ":" + ( valuesMinuteMin == 0 ? "00" : valuesMinuteMin);
+                            var valuesMaxTime = (valuesHourMax < 10 ? "0"+valuesHourMax : valuesHourMax) + ":" + ( valuesMinuteMax == 0 ? "00" : valuesMinuteMax);
+                            $( "#amountMin" ).val(valuesMinTime);
+                            $( "#amountMax" ).val(valuesMaxTime);
+                        });
+                    </script>
+                    <div class="close"></div>
+
+                </div>
+                <div class="background-fon-call"></div>
+            </div>
+        </header>
+        <div class="section">
+            <div id="wrapper">
+                <ul>
+                    <li>
+                        <div>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo maximus commodo. Praesent pellentesque lacinia iaculis. Ut at hendrerit lorem. Sed eu libero a elit ornare cursus eget ut leo. Aliquam imperdiet facilisis erat id ultrices.
+                        Quisque sollicitudin gravida odio, vitae auctor urna ullamcorper ut. Praesent posuere lacus ut sapien tincidunt convallis. Curabitur varius justo mauris, sed vestibulum dolor tempus id. Etiam pellentesque pharetra odio eu facilisis. Integer viverra eget eros sed dignissim. Aenean tincidunt sagittis dolor a pulvinar. Donec nunc tortor, venenatis ut volutpat et, bibendum at leo. Vivamus a urna ligula. Nam quis lobortis nibh. Nullam aliquam porttitor fringilla.
+
+                        Integer convallis cursus justo, sit amet vestibulum massa rhoncus sit amet. Aenean euismod sem blandit fermentum pharetra.
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo maximus commodo. Praesent pellentesque lacinia iaculis. Ut at hendrerit lorem. Sed eu libero a elit ornare cursus eget ut leo. Aliquam imperdiet facilisis erat id ultrices.
+                        Quisque sollicitudin gravida odio, vitae auctor urna ullamcorper ut. Praesent posuere lacus ut sapien tincidunt convallis. Curabitur varius justo mauris, sed vestibulum dolor tempus id. Etiam pellentesque pharetra odio eu facilisis. Integer viverra eget eros sed dignissim. Aenean tincidunt sagittis dolor a pulvinar. Donec nunc tortor, venenatis ut volutpat et, bibendum at leo. Vivamus a urna ligula. Nam quis lobortis nibh. Nullam aliquam porttitor fringilla.
+                        Integer convallis cursus justo, sit amet vestibulum massa rhoncus sit amet. Aenean euismod sem blandit fermentum pharetra.
+
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo maximus commodo. Praesent pellentesque lacinia iaculis. Ut at hendrerit lorem. Sed eu libero a elit ornare cursus eget ut leo. Aliquam imperdiet facilisis erat id ultrices.
+                        Quisque sollicitudin gravida odio, vitae auctor urna ullamcorper ut. Praesent posuere lacus ut sapien tincidunt convallis. Curabitur varius justo mauris, sed vestibulum dolor tempus id. Etiam pellentesque pharetra odio eu facilisis. Integer viverra eget eros sed dignissim. Aenean tincidunt sagittis dolor a pulvinar. Donec nunc tortor, venenatis ut volutpat et, bibendum at leo. Vivamus a urna ligula. Nam quis lobortis nibh. Nullam aliquam porttitor fringilla.
+
+                        Integer convallis cursus justo, sit amet vestibulum massa rhoncus sit amet. Aenean euismod sem blandit fermentum pharetra.
+                        </p>
+                            </div>
+                    </li>
+                    <li id="size">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo maximus commodo. Praesent pellentesque lacinia iaculis. Ut at hendrerit lorem. Sed eu libero a elit ornare cursus eget ut leo. Aliquam imperdiet facilisis erat id ultrices.
+                        Quisque sollicitudin gravida odio, vitae auctor urna ullamcorper ut. Praesent posuere lacus ut sapien tincidunt convallis. Curabitur varius justo mauris, sed vestibulum dolor tempus id. Etiam pellentesque pharetra odio eu facilisis. Integer viverra eget eros sed dignissim. Aenean tincidunt sagittis dolor a pulvinar. Donec nunc tortor, venenatis ut volutpat et, bibendum at leo. Vivamus a urna ligula. Nam quis lobortis nibh. Nullam aliquam porttitor fringilla. Integer convaмllis cursus justo, sit amet vestibulum massa rhoncus sit amet. Aenean euismod sem blandit fermentum pharetra.  Nam quis lobortis nibh. Nullam aliquam porttitor fringilla. Integer convallis cursus justo, sit amet vestibulum massa rhoncus sit amet. Aenean euismod sem blandit fermentum pharetra. Nam quis lobortis nibh. Nullam aliquam porttitor fringilla. Integer convallis cursus justo, sit amet vestibulum massa rhoncus sit amet. Aenean euismod sem blandit fermentum pharetra.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <!-- start: Скрипт для измерения высоты блоков и для изменения размера шрифта в зависимости от ширины -->
+        <script>
+            function hidden(){
+                $('.call').css('display', 'none');
+            }
+                $(".background-fon-call").click( hidden );
+                $(".close").click( hidden );
+
+            $('header > span').bind('click', function() {
+                $('.call').css('display', 'block');
+            });
+
+            function heightSize() {
+                var a=$("header").height();
+                var b=100;
+                var c=a+b;
+                var first=$(window).height();
+                var second=$('body').height();
+                var wrapper=first - c;
+                var wrapperHeight=$('#wrapper').height();
+                var firstChild=$("li:first-child").height();
+                var secondChild=$("li:first-child + li").height();
+                var thirdChild=$("li:first-child + li + li").height();
+
+                if (first > second) {
+                    $('#wrapper').css('min-height', wrapper + 'px');
+                }
+                if (wrapperHeight > firstChild && wrapper < wrapperHeight) {
+                    $('li:first-child').css('min-height', wrapperHeight + 'px');
+                } else {
+                    $('li:first-child').css('min-height', (wrapper - 65) + 'px');
+                }
+                if (wrapperHeight > secondChild && wrapper < wrapperHeight) {
+                    $('li:first-child + li').css('min-height', wrapperHeight + 'px');
+                } else {
+                    $('li:first-child + li').css('min-height', (wrapper - 65) + 'px');
+                }
+                if (wrapperHeight > thirdChild && wrapper < wrapperHeight) {
+                    $('li:first-child + li + li').css('min-height', wrapperHeight + 'px');
+                } else {
+                    $('li:first-child + li + li').css('min-height', (wrapper - 65) + 'px');
+                }
+            }
+
+            function fontSize() {
+                var width = 800; // ширина, от которой идет отсчет (можно было бы взять за основу ширину блока #size, но тогда изменения шрифа были бы не видны)
+                var fontSize = 12; // минимальный размер шрифта
+                var bodyWidth = $('.section').width();
+                var multiplier = bodyWidth / width;
+                if ($('.section').width() >= width) fontSize = Math.floor(fontSize * multiplier);
+                $('li:first-child + li + li').css({fontSize: fontSize+'px'});
+            }
+            $(function() { fontSize(); });
+            $(function() { heightSize(); });
+            $(window).resize(function() { fontSize(); });
+            $(window).resize(function() { heightSize(); });
+        </script>
+        <!-- end: Скрипт для измерения высоты блоков и для изменения размера шрифта в зависимости от ширины-->
+
+    </body>
+</html>
